@@ -1,16 +1,97 @@
-import Note from './components/Note'
+import { useState } from 'react'
 
-const App = ({ notes }) => {
+const App = () => {
+  const [persons, setPersons] = useState([{
+    name: 'Arto Hellas',
+    number: '040-123456',
+  },
+  {
+    name: 'Nemeti Stefan',
+    number:'dfgn cfg',
+  },
+  {
+    name: 'Daria',
+    number: 'bhjmnb',
+  }
+
+])
+
+  const [newName, setNewName] = useState('')
+
+  const [newNumber, setNewNumber] = useState('')
+
+  const [newFilter, setFilter] = useState('')
+
+  //functie care se ocupa efectiv de adaugarea in memorie
+  const addPerson = (event) => {
+    event.preventDefault()
+
+    if(persons.some(person => person.name === newName)) {
+      alert(`${newName} is already added to phonebook`)
+      return
+    }
+
+    if(newName === '') {
+      alert('Name cannot be empty')
+      return
+    }
+
+    if(newNumber === '') {
+      alert('Number cannot be empty')
+      return
+    }
+
+    const newPerson = {
+      name: newName,
+      number: newNumber
+    }
+    setPersons(persons.concat(newPerson))
+    setNewName('')
+    setNewNumber('')
+  }
+
+  const showPersons = () => {
+    //event.preventDefault()
+    if(newFilter == '') {
+    return persons.map((person) => <li key={person.name}>{person.name} : {person.number}</li>)
+     } else {
+      const newPersonList = persons.filter((person) => person.name.includes(newFilter))
+      return newPersonList.map((person) => <li key={person.name}>{person.name} : {person.number}</li>)
+  }
+  }
+
+  //functia ca sa se vada schimbarea de nume in text box
+  const handleNewPerson = (event) => {
+    setNewName(event.target.value)
+  }
+
+  const handleNewNumber = (event) => {
+    setNewNumber(event.target.value)
+  }
+
   return (
-    <div>
-      <h1>Notes</h1>
+    <div> 
+      <h1>Phonebook</h1>
+      <p>Filter: <input value={newFilter} onChange={(e) => setFilter(e.target.value)} /></p>
+      <h2>Add a new</h2>
+      <form onSubmit={addPerson}>
+        name: <input
+          value={newName}
+          onChange={handleNewPerson}/><br />
+        number: <input
+          value={newNumber}
+          onChange={handleNewNumber}/><br />
+        <button type="submit">add</button>
+      </form>
+      <h2>Numbers</h2>
       <ul>
-        {notes.map((note) => (
-          <Note key={note.id} note={note} />
-        ))}
+        {showPersons()}
+      
       </ul>
+
     </div>
   )
+
 }
 
-export default App
+export default App 
