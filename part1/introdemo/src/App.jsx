@@ -19,19 +19,42 @@ const Give = (props) => {
   )
 }
 
+const StatisticsLine = (props) => {
+  return (
+    <tr>
+      <td>{props.text}</td>
+      <td>{props.value}</td>
+    </tr>
+  )
+}
+
 const Statistics = ({ good, neutral, bad }) => {
   
   const total = good + neutral + bad
   
+  if(total === 0) {
+    return (
+      <div>
+        <h1>Statistics</h1>
+        <p>No feedback given</p>
+      </div>
+    )
+  }
+
   return (
-    <div>
+    <div className='table'>
       <h1>Statistics</h1>
-      <p>Good: {good}</p>
-      <p>Neutral: {neutral}</p>
-      <p>Bad: {bad}</p>
-      <p>Total: {total}</p>
-      <p>Average: {total === 0 ? 0 : (good - bad) / total}</p>
-      <p>Positive: {total === 0 ? 0 : (good / total) * 100}%</p>
+      <table>
+        <tbody>
+          <StatisticsLine text="Good" value={good} />
+          <StatisticsLine text="Neutral" value={neutral} />
+          <StatisticsLine text="Bad" value={bad} />
+          <StatisticsLine text="Total" value={total} />
+          <StatisticsLine text="Average" value={(good - bad) / total} />
+          <StatisticsLine text="Positive" value={(good / total) * 100} />
+
+        </tbody>
+      </table>
     </div>
   )
 }
